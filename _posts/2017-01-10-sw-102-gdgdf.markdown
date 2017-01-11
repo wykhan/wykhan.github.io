@@ -1,3 +1,18 @@
+---
+layout:     keynote
+title:      "new blog test"
+subtitle:   "Slides: Service Worker 101, Working Offline and Instant Loading (GDG DevFest 2016 Beijing)"
+iframe:     "//huangxuan.me/sw-101-gdgdf/"
+navcolor:   "invert"
+date:       2017-20-20
+author:     "wykhan"
+tags:
+    - 前端开发
+    - JavaScript
+    - PWA
+    - Service Worker
+---
+
 # 欢迎使用马克飞象
 
 @(示例笔记本)[马克飞象|帮助|Markdown]
