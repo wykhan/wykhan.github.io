@@ -69,9 +69,11 @@ with new_graph.as_default():
 ```
 在newgraph.asdefault() 之外的变量和操作会被添加到默认的图中。
 默认的图也可以操作，像这样：
+
 ```python
 default_g = tf.get_default_graph()
 ```
+
 大多数情况下默认的图就足够用了。
 
 
@@ -88,6 +90,7 @@ TensorFlow每做一步运算，这个函数和其依赖的图都会被执行。
 
 tf.InteractiveSession()
 这是为了方便互动专门给IPython 和 Jupyter Notebooks设计的， 让你可以使用Tensor.eval() 和 Operation.run() 计算结果，而不是必须用Session.run()
+
 ```python
 sess = tf.InteractiveSession()
 a = tf.constant(1)
