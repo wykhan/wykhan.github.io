@@ -1,36 +1,29 @@
 ---
 layout:     post
 title:      "简约tensorflow第一节：基本概念"
-subtitle:   "信息、载体、抽象、UI 设计乱谈"
+subtitle:   ""
 date:       2017-01-17
-author:     "Hux"
+author:     "wykhan"
 header-img: "img/post-bg-os-metro.jpg"
-catalog: true
+catalog: tool
 tags:
-    - hUX 随想录
-    - UX Design
-    - Windows
-    - Metro
-    - OS
+    - nutshell
+    - 入门
 ---
 
 
+## 关于tensorflow in a nutshell
 
-
-
-
-简约tensorflow第一节：基本概念
-
-
-
-![Alt text what the fuck](https://wykhan.github.io/img/tensorflow_nutshell-1-432x270.png)
+![Alt text what the fuck](/img/tensorflow_nutshell-1-432x270.png)
 TensorFlow In a Nutshell 是我见过的最简洁的入门系列。按它自己的说法：
 
-The fast and easy guide to the most popular Deep Learning framework in the world
+[The fast and easy guide to the most popular Deep Learning framework in the world](http://camron.xyz/index.php/2016/08/22/in_a_nutshell_part_one/)
 
-原博链接在这里: http://camron.xyz/index.php/2016/08/22/in_a_nutshell_part_one/
+---
 
-安好后，简单的计算功能就能实现了
+## tf四则运算
+
+tf安好后，简单的计算功能就能实现了
 
 ```python
 >>> import tensorflow as tf
@@ -54,7 +47,9 @@ The fast and easy guide to the most popular Deep Learning framework in the world
 这是一个简单的示例，演示如何创建图形（graph）并运行会话（session）。这个会话运行会产生三个操作，创建两个常数，然后矩阵乘法。
 tensorflow正如其名字所叫的，产生张量（数据），让其流动（做运算）。
 
-接下来说说tensorflow的基本概念：
+---
+
+## 接下来说说tensorflow的基本概念：
 
 图（Graph）
 

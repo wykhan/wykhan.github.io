@@ -4,12 +4,21 @@ title: About
 permalink: /about/
 ---
 
-This is the base Jekyll theme. You can find out more info about customizing your Jekyll theme, as well as basic Jekyll usage documentation at [jekyllrb.com](http://jekyllrb.com/)
 
-You can find the source code for the Jekyll new theme at:
-{% include icon-github.html username="jekyll" %} /
-[minima](https://github.com/jekyll/minima)
+ <!--copied from markdown -->
+ <blockquote><p>谦卑前行</p></blockquote>
 
-You can find the source code for Jekyll at
-{% include icon-github.html username="jekyll" %} /
-[jekyll](https://github.com/jekyll/jekyll)
+ <p>向码农场的hankcs致敬，她让我感受到程序员也可以有魅力。</p>
+ <p>我会模仿她的风格，在这里整理tensorflow的资料。</p>
+ <p>我叫巫云可汗 wykhan。</p>
+ <p>我喜欢蒙古，喜欢维京。</p>
+
+
+
+
+
+
+
+
+
+
