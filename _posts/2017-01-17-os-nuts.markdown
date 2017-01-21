@@ -23,7 +23,7 @@ tags:
 
 
 
-![Alt text](./tensorflow_nutshell-1-432x270.png)
+![Alt text](../img/tensorflow_nutshell-1-432x270.png)
 TensorFlow In a Nutshell 是我见过的最简洁的入门系列。按它自己的说法：
 
 The fast and easy guide to the most popular Deep Learning framework in the world
