@@ -1,0 +1,176 @@
+---
+layout:     post
+title:      "TensorFlow In a Nutshell 简约TF第二节：混合模型"
+subtitle:   ""
+date:       2017-02-04
+author:     "wykhan"
+header-img: "img/post-bg-os-metro.jpg"
+catalog: tool
+tags:
+    - nutshell
+    - 入门
+---
+
+
+**TensorFlow In a Nutshell**
+> The fast and easy guide to the most popular Deep Learning framework in the world         
+
+![Alt text](./tensorflow_nutshell-1-432x270.png)
+
+[原文地址](http://camron.xyz/index.php/2016/09/13/hybrid_learning/),[代码地址](https://github.com/c0cky/TensorFlow-in-a-Nutshell/tree/master/part2)
+
+这一节演示了一个广义的深度学习网络。它结合了线性模型和前向反馈网络，从而可以取得比很多传统的模型更好的预测效果。它用这种方法预测了泰坦尼克乘客的幸存几率。
+
+这种混合模型已经被谷歌用于app推荐，被 Youtube用于视频推荐。
+
+## 混合模型
+
+混合模型结合了线性模型和前向反馈神经网络，它可以产生记忆和衍生。这类模型可以用于分类问题和回归问题。依赖较少的特征工程就可以取得相对准确的预测。
+
+
+![Alt text](https://d262ilb51hltx0.cloudfront.net/max/2000/1*UutPkDr3n0DF6RrlnsAJEA.png)
+
+
+## Data
+数据集使用kaggle泰坦尼克幸存者预测的数据集，在[这里](https://www.kaggle.com/c/titanic/data)。
+
+首先要判断所用特征是连续的还是离散的。
+**连续的特征**	例如价格、年龄
+**离散的特征** 有限的集合，例如性别，国籍
+
+```python
+CATEGORICAL_COLUMNS = ["Name", "Sex", "Embarked", "Cabin"]
+CONTINUOUS_COLUMNS = ["Age", "SibSp", "Parch", "Fare", "PassengerId", "Pclass"]
+```
+
+此外还定义是否幸存的变量，1为幸存，0为未幸存。
+```python
+SURVIVED_COLUMN = "Survived"
+```
+
+## 网络
+为离散的集合创建key（不知道在做什么）
+```python
+sex = tf.contrib.layers.sparse_column_with_keys(
+column_name="Sex",keys=["female","male"])
+embarked=tf.contrib.layers.sparse_column_with_keys(
+column_name="Embarked",keys=["C","S","Q"])
+```
+
+对于值较多的离散特征，将其哈希
+```python
+cabin = tf.contrib.layers.sparse_column_with_hash_bucket(
+      "Cabin", hash_bucket_size=1000)
+name = tf.contrib.layers.sparse_column_with_hash_bucket(
+      "Name", hash_bucket_size=1000)
+```
+
+连续的特征我们使用其真实值
+```python
+age = tf.contrib.layers.real_valued_column("Age")
+passenger_id = tf.contrib.layers.real_valued_column("PassengerId")
+sib_sp = tf.contrib.layers.real_valued_column("SibSp")
+parch = tf.contrib.layers.real_valued_column("Parch")
+fare = tf.contrib.layers.real_valued_column("Fare")
+p_class = tf.contrib.layers.real_valued_column("Pclass")
+```
+我们将年龄按年龄段分组，这将提高我们的准确率
+```python
+age_buckets = tf.contrib.layers.bucketized_column(age,
+boundaries=[5, 18, 25,30, 35, 40,45, 50, 55,65])
+```
+
+接下来定义广度特征和深度特征。广度特征用来记忆特征间的相互关系
+```python
+wide_columns = [sex, embarked, p_class, cabin, name, 
+             age_buckets,
+             tf.contrib.layers.crossed_column([p_class, cabin],
+             hash_bucket_size=int(1e4)),
+             tf.contrib.layers.crossed_column(
+                   [age_buckets, sex],
+                   hash_bucket_size=int(1e6)),
+                   tf.contrib.layers.crossed_column([embarked, name],
+                   hash_bucket_size=int(1e4))]
+```
+深度特征的作用是对高维特征做降维
+```python
+deep_columns = [
+      tf.contrib.layers.embedding_column(sex, dimension=8),
+      tf.contrib.layers.embedding_column(embarked, dimension=8),
+      tf.contrib.layers.embedding_column(p_class,
+                                         dimension=8),
+      tf.contrib.layers.embedding_column(cabin, dimension=8),
+      tf.contrib.layers.embedding_column(name, dimension=8),
+      age,
+      passenger_id,
+      sib_sp,
+      parch,
+      fare,
+  ]
+```
+最终用深度特征和广度特征构建分类器
+```python
+return tf.contrib.learn.DNNLinearCombinedClassifier(
+        linear_feature_columns=wide_columns,
+        dnn_feature_columns=deep_columns,
+        dnn_hidden_units=[100, 50])
+```
+训练模型前需要做的最后一件事是为特征建立映射函数
+```python
+def input_fn(df, train=False):
+  """Input builder function."""
+  # Creates a dictionary mapping from each continuous feature column name (k) to
+  # the values of that column stored in a constant Tensor.
+  continuous_cols = {k: tf.constant(df[k].values) for k in CONTINUOUS_COLUMNS}
+  # Creates a dictionary mapping from each categorical feature column name (k)
+  # to the values of that column stored in a tf.SparseTensor.
+  categorical_cols = {k: tf.SparseTensor(
+    indices=[[i, 0] for i in range(df[k].size)],
+    values=df[k].values,
+    shape=[df[k].size, 1])
+    for k in CATEGORICAL_COLUMNS}
+  # Merges the two dictionaries into one.
+  feature_cols = dict(continuous_cols)
+  feature_cols.update(categorical_cols)
+  # Converts the label column into a constant Tensor.
+  if train:
+    label = tf.constant(df[SURVIVED_COLUMN].values)
+      # Returns the feature columns and the label.
+    return feature_cols, label
+  else:
+    # so we can predict our results that don't exist in the csv
+    return feature_cols
+```
+现在，上述工作结束之后，可以开始写训练函数了
+```python
+def train_and_eval():
+  """Train and evaluate the model."""
+  df_train = pd.read_csv(
+      tf.gfile.Open("./train.csv"),
+      skipinitialspace=True)
+  df_test = pd.read_csv(
+      tf.gfile.Open("./test.csv"),
+      skipinitialspace=True)
+```
+```python
+  model_dir = "./models"
+  print("model directory = %s" % model_dir)
+```
+```python
+  m = build_estimator(model_dir)
+  m.fit(input_fn=lambda: input_fn(df_train, True), steps=200)
+  print m.predict(input_fn=lambda: input_fn(df_test))
+  results = m.evaluate(input_fn=lambda: input_fn(df_train, True), steps=1)
+  for key in sorted(results):
+    print("%s: %s" % (key, results[key]))
+```
+最终的结果如下：
+![picture](https://app.yinxiang.com/shard/s55/res/9e9a7518-daed-48f3-ab68-f049cd937bc4)
+
+使用这个模型，仅用较少的特征工程即可得到不错的预测结果。
+![pciture](https://app.yinxiang.com/shard/s55/res/dc884ccd-9a37-4224-b329-06d49a835c3a)
+
+谷歌的论文可以在[这里](https://arxiv.org/abs/1606.07792)找到。
+Youtube的实现可以在[这里](https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/45530.pdf)找到。
+
+
