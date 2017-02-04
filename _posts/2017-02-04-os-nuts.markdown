@@ -105,8 +105,7 @@ wide_columns = [sex, embarked, p_class, cabin, name,
 deep_columns = [
       tf.contrib.layers.embedding_column(sex, dimension=8),
       tf.contrib.layers.embedding_column(embarked, dimension=8),
-      tf.contrib.layers.embedding_column(p_class,
-                                         dimension=8),
+      tf.contrib.layers.embedding_column(p_class,dimension=8),
       tf.contrib.layers.embedding_column(cabin, dimension=8),
       tf.contrib.layers.embedding_column(name, dimension=8),
       age,
@@ -152,6 +151,7 @@ def input_fn(df, train=False):
     return feature_cols
 ```
 现在，上述工作结束之后，可以开始写训练函数了
+
 ```python
 def train_and_eval():
   """Train and evaluate the model."""
