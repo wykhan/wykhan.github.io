@@ -23,6 +23,7 @@ TensorFlow In a Nutshell 是我见过的最简洁的入门系列。这是它的[
 ## 四则运算
 
 tf安好后，简单的计算功能就能实现了
+
 ```python
 >>> import tensorflow as tf
 >>> tf.add(1, 2)
@@ -47,6 +48,7 @@ tf安好后，简单的计算功能就能实现了
 tensorflow正如其名字所叫的，产生张量（数据），让其流动（做运算）。
 #### 图（Graph）
 在tensorflow中我们创建的常量和操作都会自动添加到图上。图通常是默认创建的，当要在一个文件中创建多个模型，且彼此不相关时，可以自己创建图，而不使用默认的图。
+
 ```python
 new_graph = tf.Graph()
 ```
@@ -56,6 +58,7 @@ with new_graph.as_default():
 ```
 在newgraph.asdefault() 之外的变量和操作会被添加到默认的图中。
 默认的图也可以操作，像这样：
+
 ```python
 default_g = tf.get_default_graph()
 ```
@@ -69,6 +72,7 @@ TensorFlow中有两种Session对象
 3.config — 相关配置   
 **tf.InteractiveSession()**   
 这是为了方便互动专门给IPython 和 Jupyter Notebooks设计的， 让你可以使用Tensor.eval() 和 Operation.run() 计算结果，而不是必须用Session.run()
+
 ```python
 sess = tf.InteractiveSession()
 a = tf.constant(1)
@@ -79,6 +83,7 @@ c.eval()
 ```
 #### 变量（Variables）
 变量是由会话所管理的。可以用tf.Variable()来创建。
+
 ```python
 tensorflow_var = tf.Variable(1, name="my_variable")
 ```
@@ -90,21 +95,25 @@ tensorflow_var = tf.Variable(1, name="my_variable")
 + tr.truncated_normal() - 和random normal类似，但产生的数都在2倍标准偏差以下    
 
 这些函数具有初始变量，可以定义矩阵的维度。例如：
+
 ```python
 # 4*4*4 matrix normally distribued mean 0 std 1
 normal = tf.truncated_normal([4, 4, 4], mean=0.0, stddev=1.0)
 ```
 将变量设置为这样的帮助函数
+
 ```python
 normal_var = tf.Variable(tf.truncated_normal([4, 4, 4], mean=0.0, stddev=1.0))
 ```
 当初始化这些变量时，你需要使用专门的初始化函数，并把函数传给会话。当有多个会话时也是一样。
+
 ```python
 init = tf.initialize_all_variables()
 sess = tf.Session()
 sess.run(init)
 ```
 当你想改变变量值的时候，你可以使用Variable.assigh()。它必须传到回话里才能生效。
+
 ```python
 initial_var = tf.Variable(1)
 ```
@@ -129,6 +138,7 @@ sess.run(changed_var)
 # 4
 ```
 有时你想在模型里加一个计数器，你可以使用Variable.assign_add()方法。同样的，减的时候有Variable.assign_sub()
+
 ```python
 counter = tf.Variable(0)
 ```
@@ -142,6 +152,7 @@ sess.run(counter.assign_sub(1))
 ```
 #### 域（Scope）
 域是为了控制模型的复杂性，并将他们分割成独立的模块。域可以彼此嵌套。
+
 ```python
 with tf.name_scope("Scope1"):
   with tf.name_scope("Scope_nested"):

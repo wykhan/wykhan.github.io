@@ -38,18 +38,21 @@ tags:
 **连续的特征**	例如价格、年龄
 **离散的特征** 有限的集合，例如性别，国籍
 
+
 ```python
 CATEGORICAL_COLUMNS = ["Name", "Sex", "Embarked", "Cabin"]
 CONTINUOUS_COLUMNS = ["Age", "SibSp", "Parch", "Fare", "PassengerId", "Pclass"]
 ```
 
 此外还定义是否幸存的变量，1为幸存，0为未幸存。
+
 ```python
 SURVIVED_COLUMN = "Survived"
 ```
 
 ## 网络
 为离散的集合创建key（不知道在做什么）
+
 ```python
 sex = tf.contrib.layers.sparse_column_with_keys(
 column_name="Sex",keys=["female","male"])
@@ -58,6 +61,7 @@ column_name="Embarked",keys=["C","S","Q"])
 ```
 
 对于值较多的离散特征，将其哈希
+
 ```python
 cabin = tf.contrib.layers.sparse_column_with_hash_bucket(
       "Cabin", hash_bucket_size=1000)
@@ -66,6 +70,7 @@ name = tf.contrib.layers.sparse_column_with_hash_bucket(
 ```
 
 连续的特征我们使用其真实值
+
 ```python
 age = tf.contrib.layers.real_valued_column("Age")
 passenger_id = tf.contrib.layers.real_valued_column("PassengerId")
@@ -75,12 +80,14 @@ fare = tf.contrib.layers.real_valued_column("Fare")
 p_class = tf.contrib.layers.real_valued_column("Pclass")
 ```
 我们将年龄按年龄段分组，这将提高我们的准确率
+
 ```python
 age_buckets = tf.contrib.layers.bucketized_column(age,
 boundaries=[5, 18, 25,30, 35, 40,45, 50, 55,65])
 ```
 
 接下来定义广度特征和深度特征。广度特征用来记忆特征间的相互关系
+
 ```python
 wide_columns = [sex, embarked, p_class, cabin, name, 
              age_buckets,
@@ -93,6 +100,7 @@ wide_columns = [sex, embarked, p_class, cabin, name,
                    hash_bucket_size=int(1e4))]
 ```
 深度特征的作用是对高维特征做降维
+
 ```python
 deep_columns = [
       tf.contrib.layers.embedding_column(sex, dimension=8),
@@ -109,6 +117,7 @@ deep_columns = [
   ]
 ```
 最终用深度特征和广度特征构建分类器
+
 ```python
 return tf.contrib.learn.DNNLinearCombinedClassifier(
         linear_feature_columns=wide_columns,
@@ -116,6 +125,7 @@ return tf.contrib.learn.DNNLinearCombinedClassifier(
         dnn_hidden_units=[100, 50])
 ```
 训练模型前需要做的最后一件事是为特征建立映射函数
+
 ```python
 def input_fn(df, train=False):
   """Input builder function."""
