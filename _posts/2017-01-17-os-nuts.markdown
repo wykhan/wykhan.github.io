@@ -16,7 +16,7 @@ tags:
 > The fast and easy guide to the most popular Deep Learning framework in the world         
 
 TensorFlow In a Nutshell 是我见过的最简洁的入门系列。这是它的[链接](http://camron.xyz/index.php/2016/08/22/in_a_nutshell_part_one/)。我会把它的主要内容整理在这里。   
-![Alt text what the fuck](/img/tensorflow_nutshell-1-432x270.png)    
+![Alt text](/img/tensorflow_nutshell-1-432x270.png)    
 
 ---
 

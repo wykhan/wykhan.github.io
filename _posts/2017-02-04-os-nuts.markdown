@@ -13,9 +13,10 @@ tags:
 
 
 **TensorFlow In a Nutshell**
+
 > The fast and easy guide to the most popular Deep Learning framework in the world         
 
-![Alt text](./tensorflow_nutshell-1-432x270.png)
+![Alt text](/img/tensorflow_nutshell-1-432x270.png) 
 
 [原文地址](http://camron.xyz/index.php/2016/09/13/hybrid_learning/),[代码地址](https://github.com/c0cky/TensorFlow-in-a-Nutshell/tree/master/part2)
 
@@ -28,7 +29,7 @@ tags:
 混合模型结合了线性模型和前向反馈神经网络，它可以产生记忆和衍生。这类模型可以用于分类问题和回归问题。依赖较少的特征工程就可以取得相对准确的预测。
 
 
-![Alt text](https://d262ilb51hltx0.cloudfront.net/max/2000/1*UutPkDr3n0DF6RrlnsAJEA.png)
+![Alt text](/img/nutshell-2-2.png)
 
 
 ## Data
